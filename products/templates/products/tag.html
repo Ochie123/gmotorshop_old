@@ -1,0 +1,93 @@
+{% extends "best.html" %}
+{% load i18n static utility_tags %}
+
+{% block title %}{{title}}{% endblock %}
+{% block main %}
+
+<br>
+      <div class="container">
+        <h5>showing {{ products.number }}-{{ products.number|add:products.paginator.per_page }} of {{ products.paginator.count }}  {{title}}</h5>
+                    
+          <br>
+         <div class="row">
+          {% if products %}
+          {% for product in products %}
+
+             <div class="col-6 col-md-4 col-lg-3">
+                 <div class="product product-3">
+                     <figure class="product-media">
+                         <span class="product-label">Sale</span>
+                         <a href="{{ product.get_absolute_url }}">
+                          
+                          {% with product.productimage_set.first as profile_image %}
+                          <img class="img-fluid w-100" src="{{ profile_image.image.url }}" alt="cover">
+                          {% endwith %}   
+                       
+                      </a>
+
+                         <div class="product-action-vertical">
+                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                             <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                         </div><!-- End .product-action-vertical -->
+                     </figure><!-- End .product-media -->
+
+                     <div class="product-body">
+                         <div class="product-action">
+                             <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                         </div><!-- End .product-action -->
+
+                         {% if product.tags %}
+                         {% for tag in product.tags.all %}
+                         <a href="{% url 'products:tag' slug=tag.slug %}">{{tag }},</a> 
+                       {% endfor %}                          
+                    {% endif %}
+
+
+                         
+                         <h3 class="product-title"><a href="{{product.get_absolute_url}}">{{ product.title }}</a></h3><!-- End .product-title -->
+                         <div class="product-price">
+                             <span class="new-price">${{product.price}}</span>
+                         </div><!-- End .product-price -->
+                     </div><!-- End .product-body -->
+                 </div><!-- End .product -->
+             </div><!-- End .col-sm-6 col-lg-3 -->
+             {% endfor %}
+         </div><!-- End .row -->
+         {% include "misc/includes/pagination.html" %}  
+         {% else %}
+         <p>{% trans "There are no products yet." %}</p>
+     {% endif %}      
+        </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscroll/2.3.9/jquery.jscroll.min.js"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/template" class="loader">
+        <div class="text-center">
+            <div class="loading-indicator"></div>
+        </div>
+    </script>
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-hidden="true" aria-labelledby="modal_title">
+        <div class="modal-dialog modal-dialog-centered"
+             role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal_title"
+                        class="modal-title"></h4>
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="{% trans 'Close' %}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

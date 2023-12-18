@@ -1,0 +1,6 @@
+
+<form id="search-form" action="{% url "search_products" %}" method="GET" action="search">
+  <button class="button-search"><i class="fas fa-search"></i></button>
+  <input id="q" name="q" value="{{ request.GET.q }}" required="required" 
+  class="search-input" type="text" placeholder="Search...">
+</form> 
